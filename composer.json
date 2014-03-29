@@ -1,0 +1,19 @@
+{
+	"name": "cwbit/cakephp-bootstrap-suite",
+    "description" : "A CakePHP plugin for the Bootstrap CSS and JS framework",
+    "license" : "WTFPL",
+    "type" : "cakephp-plugin",
+    "authors": [
+        {
+            "name":         "CWBIT",
+            "role":         "Author"
+        },
+    ],
+    "require" : {
+        },
+    "require-dev" : {
+    },
+    "extra": {
+    	"installer-name" : "Bootstrap"
+    }
+}
