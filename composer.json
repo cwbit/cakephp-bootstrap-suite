@@ -7,7 +7,7 @@
         {
             "name":         "CWBIT",
             "role":         "Author"
-        },
+        }
     ],
     "require" : {
         },
