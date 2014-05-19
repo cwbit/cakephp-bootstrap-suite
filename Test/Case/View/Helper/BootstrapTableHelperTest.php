@@ -20,8 +20,11 @@ class BootstrapTableHelperTest extends CakeTestCase{
 	public function testDefault(){
 		$t = $this->Table->add(['id'=>'test']);
 		$this->assertInstanceOf('BootstrapHelperEntity', $t);
+
 		$this->assertTag(['tag'=>'table'], $t, "Table not wrapped properly. Tag::table does not exist.");
-		$this->assertTag(['tag'=>'table','child'=>['tag'=>'thead']], $t, "Table header not wrapped properly. Tag::table::thead does not exist.");
+		$this->assertNotTag(['tag'=>'table','child'=>['tag'=>'thead']], $t, "Table::header should not exist, it was not specified as part of this test.");
+		$this->assertNotTag(['tag'=>'table','child'=>['tag'=>'tbody']], $t, "Table::body should not exist, it was not specified as part of this test.");
+		$this->assertNotTag(['tag'=>'table','child'=>['tag'=>'tfoot']], $t, "Table::footer should not exist, it was not specified as part of this test.");
 	}
 
 	public function testBasics(){
@@ -34,8 +37,6 @@ class BootstrapTableHelperTest extends CakeTestCase{
 
 		$result = $t->toString();
 		
-		debug($result);
-
 		$this->assertTag(['tag'=>'table','child'=>['tag'=>'thead']], $result, 'Table::thead does not exist or is not properly formatted.');
 		$this->assertTag(['tag'=>'table','child'=>['tag'=>'tbody']], $result, 'Table::tbody does not exist or is not properly formatted.');
 		$this->assertTag(['tag'=>'table','child'=>['tag'=>'tfoot']], $result, 'Table::tfoot does not exist or is not properly formatted.');
