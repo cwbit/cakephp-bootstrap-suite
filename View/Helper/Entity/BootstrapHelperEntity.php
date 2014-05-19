@@ -7,6 +7,7 @@ class BootstrapHelperEntity extends BootstrapHelper{
 	protected $_settings = null;
 	protected $_pattern = "<:tag :htmlAttributes>:content</:tag>";
 	protected $_contentToken = 'content';
+	protected $_wasCreated = false;
 	/**
 	 * @property can be used to retain node links 
 	 */
@@ -27,7 +28,11 @@ class BootstrapHelperEntity extends BootstrapHelper{
     public function toString(){ return (string) $this; }    
 
     public function __toString(){
-    	// $pattern = str_replace('contentToken', $this->_contentToken, $this->_pattern);
+    	#if create() was never called, then this entity should be considered EMPTY
+    	if(!$this->_wasCreated):
+    		return '';
+    	endif;
+    	
     	$pattern = $this->_pattern;
     	$options = $this->options();
     	if(stripos($pattern, ":".$this->_contentToken) !== false):
@@ -62,6 +67,9 @@ class BootstrapHelperEntity extends BootstrapHelper{
 	}
 
 	public function create($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
+		#set flag to explicity indicate the entity was created (see __toString() for where this is used)
+		$this->_wasCreated = true;
+
 		#merge the passed options with the entity's defaults
 		$this->mergeOptions(null,$options);
 		#allow data key remaps e.g. 'name'-->'content' in cases where model $data is passed directly

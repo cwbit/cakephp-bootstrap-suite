@@ -100,4 +100,11 @@ class BootstrapHelperEntityTest extends CakeTestCase{
 		$this->assertEquals('Bar', $this->BootstrapHelperEntity->getParentNode()->id, 'Parent Node not setting reference correctly. parentNode::id does not match after being changed by the parentNode.');
 	}
 
+	public function testEmpty(){
+		$this->assertEquals('', $this->BootstrapHelperEntity->toString(), 'Entities should return a blank string when they have not been created. This is to allow more advanced collections to automatically \'ignore\' un-created peices of themselves'); 
+
+		$this->BootstrapHelperEntity->create('test');
+		$this->assertNotEquals('', $this->BootstrapHelperEntity->toString(), 'Entity still considering itself un-created (EMPTY) after Entity::create()'); 
+	}
+
 }?>
