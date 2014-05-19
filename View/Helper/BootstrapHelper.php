@@ -61,7 +61,7 @@ class BootstrapHelper extends AppHelper{
 	}
 
 	/* wrapper for insertData that doesn't passthrough the original options by reference */
-	protected function safeInsertData($options, $data){
+	public function safeInsertData($options, $data){
 		$this->insertData($options, $data);
 		return $options;
 	}
