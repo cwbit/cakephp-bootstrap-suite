@@ -18,13 +18,25 @@ class BootstrapHelperWrappedEntityCollectionTest extends CakeTestCase{
 		$this->BootstrapHelperWrappedEntityCollection = new BHWECT($View);
 	}
 
-	public function testWrap(){
-		$this->BootstrapHelperWrappedEntityCollection->add(['id'=>'test'],['tag'=>'span']);
-		
-		$this->assertInstanceOf('BootstrapHelperEntity', $this->BootstrapHelperWrappedEntityCollection->get('test'));
-		
-		$this->assertTag(['tag'=>'div','child'=>['tag'=>'span']], $this->BootstrapHelperWrappedEntityCollection->toString());
-
+	public function tearDown(){
+		parent::tearDown();
+		unset($this->BootstrapHelperWrappedEntityCollection);
 	}
 
+	public function testWrap(){
+		
+		$this->BootstrapHelperWrappedEntityCollection->add(['id'=>'test'],['tag'=>'span']);
+		
+		$this->assertInstanceOf('BootstrapHelperEntity', $this->BootstrapHelperWrappedEntityCollection->get('test'), 'Entity Collection entity not a (sub)class of BootstrapHelperEntity');
+		
+		$this->assertTag(['tag'=>'div','child'=>['tag'=>'span']], $this->BootstrapHelperWrappedEntityCollection->toString(), 'Could not assert Entity Collection wrap. <pre>'.print_r($this->BootstrapHelperWrappedEntityCollection->toString()).'</pre>');
+
+	}
+	
+	public function testEmpty(){
+		$this->assertEquals('', $this->BootstrapHelperWrappedEntityCollection->toString(), 'Entity Colections should return a blank string when they have not been create()d. This is to allow more advanced collections to automatically \'ignore\' un-created peices of themselves'); 
+
+		$this->BootstrapHelperWrappedEntityCollection->add('test');
+		$this->assertNotEquals('', $this->BootstrapHelperWrappedEntityCollection->toString(), 'Entity Collection still considering itself un-created (EMPTY) after EntityCollection::add()'); 
+	}
 }?>

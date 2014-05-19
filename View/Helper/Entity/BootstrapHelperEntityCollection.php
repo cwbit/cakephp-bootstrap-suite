@@ -4,15 +4,15 @@ App::uses('BootstrapHelperEntity', 'Bootstrap.View/Helper/Entity');
 
 class BootstrapHelperEntityCollection extends BootstrapHelperEntity implements ArrayAccess{
 		
+	protected $_entityClass = 'BootstrapHelperEntity';
 	public $entities = [];
-	protected $_entityClass = 'BootstrapHelperEntity';	
-
-	public function __construct(View $view, $settings = array()) {
-        $this->create();
-		return parent::__construct($view, $settings);
-    }
 
 	public function __toString(){
+		# if this entity collection hasn't been officially created, then it should be treated as if it's EMPTY
+		if(!$this->_wasCreated):
+			return '';
+		endif;
+
 		$result = [];
 		foreach($this->entities as $entityId => $entity):
 			$result[] = $entity->toString();
@@ -31,6 +31,11 @@ class BootstrapHelperEntityCollection extends BootstrapHelperEntity implements A
 	}
 
 	public function add($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
+		#if this is the first time we've called add() on the collection, we need to create() it
+		if(!$this->_wasCreated):
+			$this->create();
+		endif;
+
 		$p = new $this->_entityClass($this->_view, $this->_settings);
 		$p->create($data, $options, $keyRemaps, $valueRemaps);
 		$this->entities[$p->id] = $p;

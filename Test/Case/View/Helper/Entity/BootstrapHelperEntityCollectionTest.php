@@ -14,6 +14,11 @@ class BootstrapHelperEntityCollectionTest extends CakeTestCase{
 		$this->BootstrapHelperEntityCollection = new BootstrapHelperEntityCollection($View);
 	}
 
+	public function tearDown(){
+		parent::tearDown();
+		unset($this->BootstrapHelperEntityCollection);
+	}
+
 	public function testConstruction(){
 		$this->assertInstanceOf('BootstrapHelperEntityCollection', $this->BootstrapHelperEntityCollection);
 	}
@@ -163,6 +168,13 @@ class BootstrapHelperEntityCollectionTest extends CakeTestCase{
 		unset($this->BootstrapHelperEntityCollection[0]);
 		$this->assertEquals(2, count($this->BootstrapHelperEntityCollection[null]), 'ArrayAccess::unset[$id] did not properly unset the element.' );
 
+	}
+
+	public function testEmpty(){
+		$this->assertEquals('', $this->BootstrapHelperEntityCollection->toString(), 'Entities Colections should return a blank string when they have not been create()d. This is to allow more advanced collections to automatically \'ignore\' un-created peices of themselves'); 
+
+		$this->BootstrapHelperEntityCollection->add('test');
+		$this->assertNotEquals('', $this->BootstrapHelperEntityCollection->toString(), 'Entity Collection still considering itself un-created (EMPTY) after EntityCollection::add()'); 
 	}
 
 }?>
