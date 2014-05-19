@@ -14,7 +14,7 @@ class BootstrapProgressBarHelper extends BootstrapHelper{
 				'active'=>'',// '' or 'active'
 				'prefix'=>':prefix',
 				'label'=>':label',
-				'suffix'=>' (:current/:max)',
+				'suffix'=>':suffix',
 				'htmlAttributes'=>[
 					'style'=>'width: calc(100% * :current / :max);',
 					'role'=>'progress-bar',
@@ -71,19 +71,17 @@ class BootstrapProgressBarHelper extends BootstrapHelper{
 				$this->setUnless($bar,'label',$bar);
 			endif;
 
-			// if(is_string($tempOpts) || is_int($tempOpts)):
-			// 	$this->setUnless($bar,'current',$tempOpts);
-			// 	$tempOpts = [];
-			// endif;
+			/** DEFAULTS **/
 			$this->setUnless($bar,'current',0);
 			$this->setUnless($bar,'prefix','');
-			$this->setUnless($bar,'label',$bar['current']);
+			$this->setUnless($bar,'label','(:current/:max)');
 			$this->setUnless($bar,'suffix','');
 			$this->setUnless($bar,'min',0);
 			$this->setUnless($bar,'max',100);
 			$this->setUnless($bar,'context','success');
 					
 			$this->mergeOptions('progress',$tempOpts);
+			$this->insertData($bar,$bar);
 			$this->insertData($tempOpts,$bar);
 
 			$result[] = $this->safeInsertData("<:tag class=':class' :htmlAttributes>:prefix:label:suffix</:tag>",$tempOpts);

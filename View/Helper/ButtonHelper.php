@@ -1,5 +1,7 @@
 <?php
 
+trigger_error("Bootstrap.ButtonHelper is deprectated, use Bootstrap.BootstrapButtonHelper");
+
 App::uses('BootstrapHelper','Bootstrap.View/Helper');
 
 class ButtonHelper extends BootstrapHelper{
@@ -11,7 +13,7 @@ class ButtonHelper extends BootstrapHelper{
 								'tag' => 'button',
 								'baseClass' => 'btn btn-:context btn-:size btn-:block :disabled :active',
 								'class' => '',
-								'context' => 'default',
+								'context' => ':default',
 								'size' => 'md',
 								'disabled' => '', # set to 'disabled' to disable
 								'block' => 'noblock', #set to 'block' for block width
@@ -93,6 +95,10 @@ class ButtonHelper extends BootstrapHelper{
 		$this->insertData($options, $data);
 		$this->insertData($options, $options);
 
+		if(!$this->isDirty($options,'context')):
+			$options['context'] = 'default';
+		endif;
+
 		$result = ($options['wrapper']['tag'] !== '') ?  "<{$options['wrapper']['tag']} class='{$options['wrapper']['baseClass']} {$options['wrapper']['class']}'>" : '';
 		
 		switch ($type):
@@ -106,6 +112,10 @@ class ButtonHelper extends BootstrapHelper{
 				if(!$this->isDirty($options,'id')):
 					$options['id'] = $this->generateId();
 				endif;
+				if(!$this->isDirty($options,'class')):
+					$options['class'] = '';
+				endif;
+
 				$this->setHtmlAttributes($options);
 				$result .= $this->safeInsertData("<:tag id=':id' class=':class' :htmlAttributes :link>", $options);
 				$result .= $options['labelPrefix'];

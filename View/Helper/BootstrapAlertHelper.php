@@ -1,52 +1,40 @@
 <?php
 
-App::uses('BootstrapHelper','Bootstrap.View/Helper');
 
-class BootstrapAlertHelper extends BootstrapHelper{
+App::uses('BootstrapHelperEntity', 'Bootstrap.View/Helper/Entity');
+App::uses('BootstrapHelperEntityCollection', 'Bootstrap.View/Helper/Entity');
+App::uses('BootstrapHelperWrappedEntityCollection', 'Bootstrap.View/Helper/Entity');
 
-	public $_options = [
-			'alert'=>[
-				'tag' => 'div',
-				'baseClass' => 'alert alert-:type :dismissable',
-				'class' => '',
-				'type' => 'info',
-				'dismissable' => 'alert-dismissable',
-				'title' => '',
-				'titleTag' => 'strong',
-				'content' => ':content'
-			]
-		];
+// $newAlert = $this->BootstrapAlert->add();
+class BootstrapAlertHelper extends BootstrapHelperEntityCollection{
 
-	public function alert($data, $options = []){
-		if(is_string($data) && is_string($options)):
-			$data = ['title'=>$data, 'content'=>$options];
+	protected $_entityClass = 'BootstrapAlertEntity';
+
+}
+
+
+// echo $this->BootstrapAlert->add('My Title', 'My message!');
+class BootstrapAlertEntity extends BootstrapHelperEntity{
+	protected $_pattern = "<:tag :htmlAttributes>:dismissButton:title:content</:tag>";
+
+	protected $_options = [
+		'tag' => 'div',
+		'baseClass' => 'alert alert-:context :dismissable',
+		'class' => '',
+		'context' => 'info',
+		'dismissable' => 'alert-dismissable',
+		'dismissButton'=> "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>",
+		'title' => "<strong>:title</:strong> ",
+		'content' => ':content',
+	];
+
+	public function create($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
+		if(is_string($data) && is_string($options)){
+			$this->setUnless($data, 'title', $data);
+			$this->setUnless($data, 'content', $options);
 			$options = [];
-		elseif(is_string($data)):
-			$data = ['content'=>$data];
-		endif;
-
-		$this->mergeOptions('alert',$options);
-
-		
-
-		$this->insertData($options, $data);
-		$this->insertData($options, $options);
-
-		$result = '';
-		$result .= "<:tag class=':baseClass :class'>";
-		if($options['dismissable'] !== false):
-			$result .=  "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
-		endif;
-		if($options['title'] != '') : 
-			$result .= "<:titleTag>:title</:titleTag> ";
-		endif;
-		$result .= ":content";
-		$result .= "</:tag>";
-
-		$this->insertData($result, $options);
-
-		return $result;
+		}
+		return parent::create($data, $options, $keyRemaps, $valueRemaps);
 	}
 
 }
-?>

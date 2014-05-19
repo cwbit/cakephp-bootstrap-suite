@@ -1,5 +1,7 @@
 <?php
 
+trigger_error("Bootstrap.GlyphiconHelper is deprectated, use Bootstrap.BootstrapGlyphiconHelper");
+
 App::uses('BootstrapHelper','Bootstrap.View/Helper');
 
 class GlyphiconHelper extends BootstrapHelper{

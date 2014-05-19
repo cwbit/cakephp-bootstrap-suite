@@ -191,10 +191,20 @@ class BootstrapNavHelper extends BootstrapHelper{
 		$options = [];
 		$this->mergeOptions('button',$options);
 		$args = func_get_args();
-		$this->setDefault($args,1,[]);
-		$this->setDefault($args[1],'class','');
-		$args[1]['class'] .= $options['baseClass'];
 
+		#if second param is string, assume Router::url string
+		if(isset($args[1]) && is_string($args[1])):
+			$args[0] = (array) $args[0];
+			$args[0]['link'] = $args[1];
+			unset($args[1]);
+		endif;
+
+		#inject default navbar class for buttons into options array
+		$this->setDefault($args,1,[]);
+		if(!isset($args[1]['class'])):
+			$args[1]['class'] = '';
+		endif;
+		$args[1]['class'] .= $options['baseClass'];
 		return call_user_func_array([$this->Button,'button'], $args);
 
 	}
@@ -220,6 +230,7 @@ class BootstrapNavHelper extends BootstrapHelper{
 		endforeach;
 
 		$result[] = $this->safeInsertData("</ul><!-- navbar dropdown list -->",$options);
+		$result[] = $this->safeInsertData("</li><!-- navbar dropdown wrapper -->",$options);
 
 		return implode(PHP_EOL, $result);
 

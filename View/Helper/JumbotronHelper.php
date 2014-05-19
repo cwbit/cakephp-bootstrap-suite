@@ -1,4 +1,5 @@
 <?php
+trigger_error("Bootstrap.JumbotronHelper is deprectated, use Bootstrap.BootstrapJumbotronHelper");
 
 App::uses('BootstrapHelper','Bootstrap.View/Helper');
 

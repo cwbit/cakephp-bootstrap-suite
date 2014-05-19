@@ -7,9 +7,9 @@ class BootstrapPanelHelper extends BootstrapHelper{
 	public $_options = [
 			'panel' =>[
 				'tag'=>'div',
-				'baseClass'=> 'panel panel-:type',
+				'baseClass'=> 'panel panel-:context',
 				'class'=>'',
-				'type'=>'default',
+				'context'=>'default',
 				'heading'=>[
 					'tag'=>'div',
 					'baseClass'=>'panel-heading',

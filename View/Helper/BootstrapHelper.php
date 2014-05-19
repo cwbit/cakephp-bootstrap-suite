@@ -10,31 +10,25 @@ class BootstrapHelper extends AppHelper{
 
 	protected $_currentOptionIndex = '';
 
-
 	/**
 	 * @property $_options holder for Helper options
 	 */ 
 	protected $_options = [];
-	/**
-	 * @property $_dirtyOptions true if options have been merged with user changes, false otherwise
-	 */ 
-	// protected $_dirtyOptions = false;
-	/**
-	 * @property $_dirtyData true if :data has been inserted into option values
-	 */ 
-	// protected $_dirtyData = false;
 
 	protected $_result = '';
+
+	public function __toString(){ return '';}
 
 	protected static function stringInsert(&$value, $key, $data){
 		$value = String::insert($value, $data);
 	}
 
 	protected function mergeOptions($index = null, &$options = [], $force = false){
+		$o = $this->_options;
 		if($index===null):
-			$options = array_replace_recursive($this->_options, $options);
+			$options = array_replace_recursive($o, $options);
 		elseif(is_string($index)):
-			$options = array_replace_recursive($this->_options[$index], $options);
+			$options = array_replace_recursive($o[$index], $options);
 			$this->_currentOptionIndex = $index;
 		elseif(is_array($index)):
 			$options = array_replace_recursive($index, $options);
@@ -49,13 +43,6 @@ class BootstrapHelper extends AppHelper{
 	}
 
 	public function insertData(&$options, $data){
-
-		// if(is_string($data)):
-		// 	$temp = [];
-		// 	//$temp[$this->fallbackIndex] = $data;
-		// 	$data = $temp; unset($temp);
-		// endif;
-		// if(!$this->_dirtyData && !$force): # skip if insert has already been done this run
 		if(is_array($options)):
 			array_walk_recursive($options,['self','stringInsert'],$data);
 		elseif(is_string($options)):
@@ -63,12 +50,14 @@ class BootstrapHelper extends AppHelper{
 				$this->mergeClasses($data);
 			endif;
 			if(stripos($options, ':htmlAttributes') !== false):
+				if((stripos($options, ':class') === false) && isset($data['class'])):
+					$data['htmlAttributes']['class'] = (isset($data['htmlAttributes']['class'])) ? $data['htmlAttributes']['class'] + $data['class'] : $data['class'];
+				endif;
 				$this->setHtmlAttributes($data);
 			endif;
 			$this->stringInsert($options,[],$data);
 		endif;
-			// $this->_dirtyData = true;
-		// endif;
+
 	}
 
 	/* wrapper for insertData that doesn't passthrough the original options by reference */
@@ -149,7 +138,8 @@ class BootstrapHelper extends AppHelper{
 	 * @return string
 	 */
 	protected function generateId(){
-		return $this->_currentOptionIndex.'-'.intval(mt_rand());
+		$prefix = ($this->_currentOptionIndex != '') ? $this->_currentOptionIndex.'-' : '';
+		return $prefix.intval(mt_rand());
 	}
 	
 }
