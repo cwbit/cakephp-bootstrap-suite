@@ -19,9 +19,17 @@ class BootstrapHelperEntity extends BootstrapHelper{
 	public $data = '';
 
 	public function __construct(View $view, $settings = array()) {
-        parent::__construct($view, $settings);
-        $this->_view = $view;
-        $this->_settings = $settings;
+		parent::__construct($view, $settings);
+		$this->_view = $view;
+		$this->_settings = $settings;
+
+		#things passed to $settings can be used to seed $_options
+		#useful for disposable entity classes
+		if(!empty($settings) && is_array($settings)):
+			$this->mergeOptions(null,$settings);
+			$this->_options = $settings;
+		endif;
+
 		return $this;
     }
 

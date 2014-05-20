@@ -107,4 +107,35 @@ class BootstrapHelperEntityTest extends CakeTestCase{
 		$this->assertNotEquals('', $this->BootstrapHelperEntity->toString(), 'Entity still considering itself un-created (EMPTY) after Entity::create()'); 
 	}
 
+	public function testDisposable(){
+
+		$Controller = new Controller();
+		$View = new View($Controller);
+
+		$settings = [
+			'tag'=>'p',
+			'htmlAttributes'=>[
+				'class'=>'foo',
+				'data-target'=>'bar',
+			]
+		];
+
+		$t = new BootstrapHelperEntity($View, $settings);
+
+		$t->create('Gimme Content');
+
+		$this->assertTag(
+				[
+					'tag' => 'p',
+					'content' => 'Gimme Content',
+					'attributes' => [
+						'class' => 'foo',
+						'data-target' => 'bar',
+					]
+				],
+				$t,
+				'Failed asserting $settings -> $_options conversion for disposable, pre-configured entities'
+			);
+	}
+
 }?>
