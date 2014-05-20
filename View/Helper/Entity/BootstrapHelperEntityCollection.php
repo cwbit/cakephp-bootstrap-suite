@@ -28,6 +28,8 @@ class BootstrapHelperEntityCollection extends BootstrapHelperEntity implements A
 		foreach($entities as $entity):
 			call_user_func_array([$this,'add'], $entity);
 		endforeach;
+
+		return $this;
 	}
 
 	public function add($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
