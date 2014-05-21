@@ -11,12 +11,12 @@ It does this by providing helper classes that employ an Entity, Collection, and 
 ====
 * [Architecture](#arch)
 * [Using the Plugin](#how)
-** [Glyphicon Example](#how-ex-1)
-** [Table Example](#how-ex-2)
+ * [Glyphicon Example](#how-ex-1)
+ * [Table Example](#how-ex-2)
 * [Create your Own](#create)
-** [Entity](#create-entity)
-** [Entity Collection](#create-entity-collection)
-** [Wrapped Entity Collection](#create-entity-wrapped-collection)
+ * [Entity](#create-entity)
+ * [Entity Collection](#create-entity-collection)
+ * [Wrapped Entity Collection](#create-entity-wrapped-collection)
 * [Exceptions](#exceptions)
 * [Plugin Installation](#installation)
 
