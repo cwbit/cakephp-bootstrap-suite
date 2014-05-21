@@ -7,18 +7,34 @@ The CakePHP Bootstrap Suite (Bootstrap) is a plugin suite of CakePHP Helpers tha
 
 It does this by providing helper classes that employ an Entity, Collection, and Wrapped Collection architecture to create and manipulate objects.
 
+## TOC
+====
+* [Architecture](#arch)
+* [Using the Plugin](#how)
+** [Glyphicon Example](#how-ex-1)
+** [Table Example](#how-ex-2)
+* [Create your Own](#create)
+** [Entity](#create-entity)
+** [Entity Collection](#create-entity-collection)
+** [Wrapped Entity Collection](#create-entity-wrapped-collection)
+* [Exceptions](#exceptions)
+* [Plugin Installation](#installation)
+
+<a name='arch'/>
 ## A note about the Architecture
 ====
 This plugin uses Entities to control and display everything. Each Entity is an intelligent class that holds all of its parts until it needs to spit everything out. 
 
 Please note: the entity concept was devised quite separately from what is apparently coming in Cake3 for models, so any similarity is not intentional and does not imply a similar usage or implementation.
 
-## How to use the PLugin
+<a name='how'/>
+## How to use the Plugin
 ====
 Make sure you install it following the instructions later in this readme.
 
 There are a number of Helper Classes already provided. If you know what a Test Case is you  should check out the Test cases already provided to see examples of how each helper is used.
 
+<a name='how-ex-1'/>
 ### Glyphicon example (easy)
 ===
 Let's take a look at the pretty simple Glypicon helper
@@ -40,6 +56,9 @@ Let's take a look at the pretty simple Glypicon helper
 
 That's it - that's how you use the GlyphiconHelper! Easy, eh?
 
+<a name='how-ex-2'/>
+### Table Example (more complicated)
+===
 Now let's look at a more complicated example, because this is where the setup will really start to shine.
 
 ```php
@@ -92,20 +111,23 @@ Now let's look at a more complicated example, because this is where the setup wi
 	</table>
 
 ```
-Not bad! That's a pretty basic example. There are lots more things you can do, even with tables. But that should give you the gist of what's going on in each Helper.
+Not bad! See how it provided default Bootstrap formatting, wrapped all your data in the proper elements, and still only required a few calls?
+
+That's a pretty basic example. There are lots more things you can do, even with tables. But that should give you the gist of what's going on in each Helper.
 
 Remember to take a look in the classes, the test cases provided, and any other examples (even the ones later in this doc) to figure out what's going on.
 
-
+<a name='create'/>
 ## Creating your own Helper (or understanding what's going on)
 ====
 
-The whole system uses three main peices. An Entity (something like a list item), and either a plain Entity Collection (to hold the list items) or a Wrapped Entity Collection (to hold the list items and wrap them in a <ul> when it prints itself.) or any and all combinations of all three.
+The whole system uses three main peices. An Entity (something like a list item), and either a plain Entity Collection (to hold the list items) or a Wrapped Entity Collection (to hold the list items and wrap them in a `<ul>` when it prints itself.) or any and all combinations of all three.
 
 If you're looking for a good example of a completx setup, check out the BootstrapTableHelper - it has all three!
 
 We take a look at each of those three and how/why/when to build your own.
 
+<a name='create-entity'/>
 ### An example ENTITY
 An entity is, and should be, a single idea - A paragraph is an entity, a cell in a table is an entity, an image is an entity, etc. 
 An entity can also be made up of other entities. 
@@ -133,14 +155,14 @@ For our example we will make a completely useless Paragraph entity. A Paragraph 
 	<p class='foo'>Hello World!</p>
 
 ```
-
+<a name='create-entity-collection'/>
 ### Continuing the Example with an ENTITY COLLECTION
 
-An EntityCollection is simply that, a collection of entities with no special relation to each other. Most of the Helpers in this plugin are Entity Collections; for example GlyphiconHelper extends BootstrapHelperEntityCollection and simply holds any glyphs you create in case you need to get to them later on.
+An EntityCollection is simply that, a collection of entities with no special relation to each other. Most of the Helpers in this plugin are Entity Collections; for example `GlyphiconHelper` extends `BootstrapHelperEntityCollection` and simply holds any glyphs you create in case you need to get to them later on.
 
 There is a special case for Wrapped Entity Collections that we will look at in the next section.
 
-Continuing on with our Paragraph entity, let's make the following adjustments. Let's make a paragraph collection that stores all the paragraphs we make.
+Continuing on with our Paragraph entity, let's make the following adjustments. Let's make a paragraph collection that stores all the paragraphs we add.
 ```php
 
 	#create a collection class that will use the ParagraphEntity class (from prev example) when it create()s new entities
@@ -148,6 +170,7 @@ Continuing on with our Paragraph entity, let's make the following adjustments. L
 		public $_entityClass = 'ParagraphEntity';
 	}
 
+	#now let's use it (and yes, it was that easy)
 	$this->ParagraphCollection->add('I');		# calling add() will instantiate an $_entityClass
 	$this->ParagraphCollection->add('LOVE');	# call create(...params...) on the new instance
 	$this->ParagraphCollection->add('ME');		# and set up some other collection-specific stuff
@@ -169,18 +192,21 @@ Continuing on with our Paragraph entity, let's make the following adjustments. L
 	<p class='serious'>PARAGRAPHS</p>
 
 ```
+<a name='create-entity-wrapped-collection'/>
 ### Continuing the example with a Wrapped Entity Collection
 
 Next we'll take a look at the special case of a Wrapped Entity Collection. Oddly enough, this class was what actually drove me to implement the entity architecture of the plugin.
 
-It is often the case that you have an arbitrary number of items (1 or more) that all need to go together AND need to be wrapped in something else. The previous design required that you call a begin() ... all your elements.. and an end().
+It is often the case that you have an arbitrary number of items (1 or more) that all need to go together AND need to be wrapped in something else. The previous design required that you call a `begin() ... all your elements... end()` - cumbersome and iffy.
 
 ```php
 	
 	#example of the old way
-	echo $this->Nav->groupBegin();
-	echo //...lots of nav elements...//
-	echo $this->Nav->groupEnd();
+	echo $this->Nav->begin()
+		echo $this->Nav->groupBegin();
+			echo //...lots of nav elements...//
+		echo $this->Nav->groupEnd();
+	echo $this->Nav->end()
 ```
 This old was was very cumbersome and required you to not only keep track of where you were, but more importantly, required you to intimately know the details of how each Helper worked, what groups needed to be called when, and what items could (or had to) go in what groups. It was a pain in the butt.
 
@@ -188,7 +214,7 @@ Thus wrapped entity collections were actually the drivers for the whole re-write
 
 Let's take a look.
 
-Let's change our example from before to make a little more sense. Instead of dealing with Paragraphs lets look at the ListGroupHelper. We'll use it to make a properly formatted Bootstrap ListGroup
+Let's change our example from before to make a little more sense. Instead of dealing with Paragraphs lets create a `ListGroupHelper`. We'll use it to make a properly formatted Bootstrap List Group
 
 ```php
 
@@ -215,6 +241,7 @@ Let's change our example from before to make a little more sense. Instead of dea
 	#Let's get our ListGroup object
 	#this call won't work if you copy/paste this example, you'll need
 	#to set up $view and $settings first
+	#this is more to show you what Cake is normally passing your Helper
 	$listGroup = new ListEntityCollection($View, $settings);
 
 	#Now let's add some list items (like we saw earlier)
@@ -226,7 +253,7 @@ Let's change our example from before to make a little more sense. Instead of dea
 		['Vestibulum at eros']
 		);
 
-	#now let's see why we bothered with a wrapped collectio
+	#now let's see why we bothered with a wrapped collection
 	echo $listGroup;
 
 	#if we echo the collection we will get the following!
@@ -238,10 +265,12 @@ Let's change our example from before to make a little more sense. Instead of dea
 	  <li class="list-group-item">Vestibulum at eros</li>
 	</ul>
 
-	# see how it wrapped all the list items for us? No need
-	# for us to remember how they're supposed to go - it does that
-	# all for us!
 ```
+See how it wrapped all the list items for us? No need for us to remember how they're supposed to go - it does that all for us!
+
+WIN.
+
+<a name='exceptions'/>
 ## Exceptions
 ====
 There are a couple of classes that don't follow the Entity architecture yet.
@@ -249,6 +278,7 @@ NavHelper is a big one. In order to get some of them to work there are peices of
 
 It's actually interesting to compare them to see how much work the newer design does automatically for you. Compare NavHelper and TableHelper - both do about the same amount of complexity/work, but one is vastly easier to read and maintain than the other.
 
+<a name='installation'/>
 ## Installation
 ====
 
