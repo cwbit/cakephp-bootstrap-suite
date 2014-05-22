@@ -86,13 +86,12 @@ class BootstrapTableCellEntity extends BootstrapHelperEntity{
 		'tag' => 'td',
 	];
 }
-class BootstrapTableHeaderRowCollection extends BootstrapHelperWrappedEntityCollection{
+
+/* Table header row/cell are just specialized versions of normal */
+class BootstrapTableHeaderRowCollection extends BootstrapTableRowCollection{
 	protected $_entityClass = 'BootstrapTableHeaderCellEntity';
-	protected $_options = [
-		'tag' => 'tr',
-	];
 }
-class BootstrapTableHeaderCellEntity extends BootstrapHelperEntity{
+class BootstrapTableHeaderCellEntity extends BootstrapTableCellEntity{
 	protected $_options = [
 		'tag' => 'th',
 	];
