@@ -7,6 +7,55 @@ The CakePHP Bootstrap Suite (Bootstrap) is a plugin suite of CakePHP Helpers tha
 
 It does this by providing helper classes that employ an Entity, Collection, and Wrapped Collection architecture to create and manipulate objects.
 
+NOTE: Technically you can use the Entity architecture of this plugin to print out ANY valid HTML, XML and even preconfigure them with default, overrideable options. Want an entity that can handle perfectly formatted reponsive image tags? If you've typed more than 3 lines (from class to } ) then you've type too much. Want an infinitely expandable, perfectly formatted, bootstrap styled, manipulatable and on-the-fly modifiable unordered list collection? You should clock in at about ... 7 lines total code. 2 lines of which are class declarations and 2 lines of which are the close curly bracket for your class.
+
+Let's create a complete, fully functional example in 7 lines or less.
+
+```php
+	//.. in app/Plugins/Bootstrap/View/Helper/ListCollectionHelper.php
+	
+	class ListCollectionHelper extends BootstrapHelperWrappedEntityCollection{
+		public $_options = ['tag'=>'ul','baseClass'=>'list-group'];
+		public $_entityClass = 'ListItem';
+	}
+	class ListItem extends BootstrapHelperEntity{
+		public $_options = ['tag'=>'ul','baseClass'=>'list-group-item'];
+	}
+```
+YUP. 7 lines. Wanna use it? Let's add it as a helper and start using it
+```php
+	//.. in your controller
+	public $uses = ['Bootstrap.ListCollection'];
+	
+	//.. in your view
+	$l = $this->ListCollection->add();
+	$l->add('Hello');
+	$l->add('World');
+```
+Ok, how about we see what it looks like when told to print itself.
+```php
+	# anything that calls __toString() will work
+	echo $l;
+	
+	# prints out the following
+	<ul class='list-group'>
+		<li class='list-group-item'>Hello</li>
+		<li class='list-group-item'>World</li>
+	</ul>
+	
+```
+Perfectly formatting, classed and le sexy. Mindblown.
+
+We (figuratively) just created a UL helper in 7 lines that oh, I dunno, is also a perfectly formatted, expandable, go-back-and-change-something-on-the-fly-if-you-want Bootstrap List Group.
+
+To put it another way, this is an extremely powerful presentation system that just happens to come pre-bundled with Helpers that support Bootstrap.
+
+## Requirements
+===
+* CakePHP
+* Bootstrap 3.x
+  Technically you can support whatever version of bootstrap you want, just make/modify the appropriate helpers.
+
 ## TOC
 ====
 * [Architecture](#arch)
