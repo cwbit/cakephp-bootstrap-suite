@@ -4,7 +4,7 @@ App::uses('BootstrapHelper', 'Bootstrap.View/Helper');
 
 class BootstrapNavHelper extends BootstrapHelper{
 
-	public $helpers = ['Bootstrap.BootstrapHtml','Bootstrap.Button'];
+	public $helpers = ['Bootstrap.BootstrapHtml','Bootstrap.BootstrapButton'];
 
 	public $_options = [
 			'nav'=>[
@@ -205,7 +205,7 @@ class BootstrapNavHelper extends BootstrapHelper{
 			$args[1]['class'] = '';
 		endif;
 		$args[1]['class'] .= $options['baseClass'];
-		return call_user_func_array([$this->Button,'button'], $args);
+		return call_user_func_array([$this->BootstrapButton,'add'], $args);
 
 	}
 
