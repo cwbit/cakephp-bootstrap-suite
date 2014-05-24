@@ -4,23 +4,23 @@ App::uses('BoostCakeHtmlHelper','Bootstrap.View/Helper');
 App::uses('BootstrapHelper','Bootstrap.View/Helper');
 /**
  * This is an extremely special needs helper. 
- * We have to override FormHelper to support the formatting demands of Bootstrap; BoostCakeFormHelper is designed for exactly 
+ * We have to override HtmlHelper to support the formatting demands of Bootstrap; BoostCakeHtmlHelper is designed for exactly 
  * this purpose.
- * But by itself BoostCakeFormHelper actually ONLY expands FormHelper to support BS 3.x. It doesn't actually provide
+ * But by itself BoostCakeHtmlHelper actually ONLY expands HtmlHelper to support BS 3.x. It doesn't actually provide
  * and default values, which is really what we're after.
  * 
  * To accomplish this we create an extension of our main BootstrapHelper that uses PHPs __call to look in
- * BoostCakeFormHelper for functions it doesn't have (namely, all of the functions in FormHelper).
+ * BoostCakeHtmlHelper for functions it doesn't have (namely, all of the functions in HtmlHelper).
  * Then, if BCFH has the function (e.g. create()), we combine any passed $args with default $arg values in $_args
  * 
- * The net result is that BCFH provides expanded FormHelper support for Bootstrap, and BootstrapFormHelper provides
+ * The net result is that BCFH provides expanded HtmlHelper support for Bootstrap, and BootstrapHtmlHelper provides
  * default formatting parameters so we don't need to remember them each time.
  * 
- * Treat BootstrapFormHelper exactly like FormHelper or BCFH
- * e.g. BootstrapForm->input(...)
+ * Treat BootstrapHtmlHelper exactly like HtmlHelper or BCFH
+ * e.g. BootstrapHtml->input(...)
  */
 
-class BootstrapHtmlHelper extends BootstrapHelper {// extends BoostCakeFormHelper{
+class BootstrapHtmlHelper extends BootstrapHelper {// extends BoostCakeHtmlHelper{
 
 	// public $uses = ['Bootstrap'];
 
@@ -47,11 +47,11 @@ class BootstrapHtmlHelper extends BootstrapHelper {// extends BoostCakeFormHelpe
 
 	/**
 	 * This function is called by PHP when a function is called on SELF that doesn't exist in SELF, or PARENT
-	 * We are using this function in conjunction with BoostCakeFormHelper to provide an injection override
-	 * for FormHelper.
+	 * We are using this function in conjunction with BoostCakeHtmlHelper to provide an injection override
+	 * for HtmlHelper.
 	 * 
-	 * Use BootstrapForm just like the FormHelper. If the method doesn't exist in SELF/PARENT (e.g. create()) then
-	 * __call will be used to look in the BoostCakeFormHelper (whose PARENT is FormHelper and this create() exists)
+	 * Use BootstrapHtml just like the HtmlHelper. If the method doesn't exist in SELF/PARENT (e.g. create()) then
+	 * __call will be used to look in the BoostCakeHtmlHelper (whose PARENT is HtmlHelper and this create() exists)
 	 * 
 	 * Use the $_args array to inject default function options into function call
 	 * 	e.g.
@@ -60,7 +60,7 @@ class BootstrapHtmlHelper extends BootstrapHelper {// extends BoostCakeFormHelpe
 	 * 					0 => 'GO BABY GO!'
 	 * 				]
 	 * 			]
-	 * will inject the string 'GO BABY GO!' into the first parameter of FormHelper->end('GO BABY GO!')
+	 * will inject the string 'GO BABY GO!' into the first parameter of HtmlHelper->end('GO BABY GO!')
 	 * 
 	 * For function declarations to inject/override, look here --> http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html
 	 * 
