@@ -24,8 +24,8 @@ class BootstrapThumbnailEntity extends BootstrapHelperEntity{
 
     public function __toString(){
     	$result = [];
-    	$result[] = $this->Image->toString();
-    	$result[] = $this->Caption->toString();
+    	$result[] = (string) $this->Image;
+    	$result[] = (string) $this->Caption;
 
     	$options = $this->options();
     	$options[$this->_contentToken] = implode(PHP_EOL, $result);
