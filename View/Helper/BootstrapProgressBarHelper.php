@@ -7,19 +7,19 @@ App::uses('BootstrapHelperEntityCollection', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperWrappedEntityCollection', 'Bootstrap.View/Helper/Entity');
 
 class BootstrapProgressBarHelper extends BootstrapHelperEntityCollection{
-	protected $_entityClass = 'BootstrapProgressBarEntityCollection';
+	protected $_entityClass = 'BootstrapProgressBarEntity';
 
 }
 
-class BootstrapProgressBarEntityCollection extends BootstrapHelperWrappedEntityCollection{
-	protected $_entityClass = 'BootstrapProgressBarEntity';
+class BootstrapProgressBarEntity extends BootstrapHelperWrappedEntityCollection{
+	protected $_entityClass = 'BootstrapProgressBarSegment';
 	protected $_options	= [
 		'tag'=>'div',
 		'baseClass'=>'progress',
 	];
 }
 
-class BootstrapProgressBarEntity extends BootstrapHelperEntity{
+class BootstrapProgressBarSegment extends BootstrapHelperEntity{
 	protected $_options = [
 		'tag'=>'div',
 		'baseClass'=>'progress-bar progress-bar-:context :active',
