@@ -31,18 +31,26 @@ class BootstrapJumbotronEntity extends BootstrapHelperEntity{
     }
 
 	public function create($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
-		if(is_string($data) && is_string($options)){
-			$this->Title->create($data, [], $keyRemaps, $valueRemaps);
-			$this->Body->create($options, [], $keyRemaps, $valueRemaps);
-			$options = [];
-		}
-		return parent::create($data, $options, $keyRemaps, $valueRemaps);
+		if(is_string($data)):
+			if(is_string($options)):
+				$this->Title->create($data, [], $keyRemaps, $valueRemaps);
+				$this->Body->create($options, [], $keyRemaps, $valueRemaps);
+				$options = [];
+			else:
+				$this->Title->create($data, $options, $keyRemaps, $valueRemaps);
+				$this->Body->create('', [], $keyRemaps, $valueRemaps);
+			endif;
+			
+			return parent::create();
+		else:		
+			return parent::create($data, $options, $keyRemaps, $valueRemaps);
+		endif;
 	}
 
 	public function __toString(){
 		$result = [];
-		$result[] = $this->Title->toString();
-		$result[] = $this->Body->toString();
+		$result[] = (string) $this->Title;
+		$result[] = (string) $this->Body;
 
 		$options = $this->options();
     	$options[$this->_contentToken] = implode(PHP_EOL, $result);
