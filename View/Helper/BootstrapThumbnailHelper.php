@@ -1,5 +1,6 @@
 <?php
 App::uses('BootstrapHelperEntity', 'Bootstrap.View/Helper/Entity');
+App::uses('BootstrapHelperMultipartEntity', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperEntityCollection', 'Bootstrap.View/Helper/Entity');
 // App::uses('BootstrapHelperWrappedEntityCollection', 'Bootstrap.View/Helper/Entity');
 
@@ -7,33 +8,56 @@ class BootstrapThumbnailHelper extends BootstrapHelperEntityCollection{
 	protected $_entityClass = 'BootstrapThumbnailEntity';
 }
 
-class BootstrapThumbnailEntity extends BootstrapHelperEntity{
-	public $Image = null;
-	public $Caption = null;
+class BootstrapThumbnailEntity extends BootstrapHelperMultipartEntity{
+
+	protected $parts = [
+		'Image' => 'BootstrapThumbnailImageEntity',
+		'Caption' => 'BootstrapThumbnailCaptionEntity'
+		];
 
 	protected $_options = [
 		'tag' => 'div',
 		'baseClass' => 'thumbnail',
 	];
 
-	public function __construct(View $view, $settings = array()) {
-        parent::__construct($view, $settings);
-        $this->Image = new BootstrapThumbnailImageEntity($view, $settings);
-        $this->Caption = new BootstrapThumbnailCaptionEntity($view, $settings);
-    }
+	public function create($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
+		if(is_string($data)):
+			if(is_string($options)):
+				if(is_string($keyRemaps)):
+					$this->Caption->Title->create($keyRemaps);
+					$keyRemaps = false;
+				endif;
+				$this->Caption->create($options, [], $keyRemaps, $valueRemaps);
+				$options = [];
+			endif;
+			$this->Image->create($data, $options, $keyRemaps, $valueRemaps);
+			$data = '';
+		endif;
+		return parent::create($data, $options, $keyRemaps, $valueRemaps);
+	}
 
-    public function __toString(){
-    	$result = [];
-    	$result[] = (string) $this->Image;
-    	$result[] = (string) $this->Caption;
+	// public $Image = null;
+	// public $Caption = null;
 
-    	$options = $this->options();
-    	$options[$this->_contentToken] = implode(PHP_EOL, $result);
+	// public function __construct(View $view, $settings = array()) {
+ //        parent::__construct($view, $settings);
+ //        $this->Image = new BootstrapThumbnailImageEntity($view, $settings);
+ //        $this->Caption = new BootstrapThumbnailCaptionEntity($view, $settings);
+ //    }
 
-    	$this->options($options);
+ //    public function __toString(){
+ //    	$result = [];
+ //    	$result[] = (string) $this->Image;
+ //    	$result[] = (string) $this->Caption;
 
-    	return parent::__toString();
-    }
+ //    	$options = $this->options();
+ //    	$options[$this->_contentToken] = implode(PHP_EOL, $result);
+
+ //    	$this->options($options);
+
+ //    	return parent::__toString();
+ //    }
+
 
 }
 
