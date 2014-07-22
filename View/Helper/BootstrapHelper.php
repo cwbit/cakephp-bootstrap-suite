@@ -2,6 +2,8 @@
 
 App::uses('AppHelper','View/Helper');
 
+class BootstrapFrameworkException extends Exception{}
+
 class BootstrapHelper extends AppHelper{
 
 //	public $helpers = ['Bootstrap.BootstrapHtml'];
