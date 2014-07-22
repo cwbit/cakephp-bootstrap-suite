@@ -11,7 +11,7 @@ class BootstrapButtonHelper extends BootstrapHelperEntityCollection{
 }
 
 class BootstrapButtonEntity extends BootstrapHelperEntity{
-	protected $_pattern = "<:tag id=':id' :htmlAttributes :link>:labelPrefix:label:labelSuffix</:tag>";
+	protected $_pattern = "<:tag :htmlAttributes>:labelPrefix:label:labelSuffix</:tag>";
 	protected $_contentToken = 'label';
 
 	protected $_options = [
@@ -25,11 +25,11 @@ class BootstrapButtonEntity extends BootstrapHelperEntity{
 		'label' => ':label',
 		'labelPrefix' => '', #allows for injection of things like glyphicons
 		'labelSuffix' => '', #or dropdown carets
-		// 'link' =>':link',
-		'link'=>"onclick=\"window.location.assign(':link')\"",
 		'htmlAttributes'=>[
+			'id' => ':id',
 			'role' => 'button',
 			'type' =>'button',
+			'onclick'=>'window.location.assign(":link")'
 			//'data-toggle'=>'',
 		],
 	
