@@ -53,6 +53,17 @@ class BootstrapHelperEntityCollection extends BootstrapHelperEntity implements A
 	}
 
 	/**
+	 * This passthrough function will allow create() calls on an EntityCollection to generate a one-off instance of $_entityClass to be called; instead of always first requiring an add() call (which stores each child $_entityClass instance in the parent helper - which can be very memory intensive and is generally not needed)
+	 * 
+	 * @see BootsrapHelperEntity::create()
+	 * @return BootstrapHelperEntity
+	 */
+	public function create($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
+		$p = new $this->_entityClass($this->_view, $this->_settings);
+		return $p->create($data, $options, $keyRemaps, $valueRemaps);
+	}
+
+	/**
 	 * Calls add() foreach $entities as $entity where $entity is an array of params for the create() function
 	 * @param array $entities an array of arrays
 	 * @return BootstrapHelperEntityCollection returns $this
@@ -85,8 +96,9 @@ class BootstrapHelperEntityCollection extends BootstrapHelperEntity implements A
 			$this->create();
 		endif;
 
-		$p = new $this->_entityClass($this->_view, $this->_settings);
-		$p->create($data, $options, $keyRemaps, $valueRemaps);
+		// $p = new $this->_entityClass($this->_view, $this->_settings);
+		// $p->create($data, $options, $keyRemaps, $valueRemaps);
+		$p = $this->create($data, $options, $keyRemaps, $valueRemaps);
 		$this->entities[$p->id] = $p;
 		$p->setParentNode($this);
 		return $p;
@@ -148,6 +160,8 @@ class BootstrapHelperEntityCollection extends BootstrapHelperEntity implements A
 	public function offsetGet($offset) {
 		return isset($this->entities[$offset]) ? $this->entities[$offset] : $this->entities;
 	}
+
+
 
 }
 ?>
