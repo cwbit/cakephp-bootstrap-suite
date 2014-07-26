@@ -98,7 +98,7 @@ class BootstrapHtmlHelper extends BootstrapHelper {// extends BoostCakeHtmlHelpe
 	}
 
 	public function dataTable($records, $controller, $fields = ['name'], $actions = ['view']){
-		$this->Button = $this->_View->loadHelper('Bootstrap.Button');
+		$this->BootstrapButton = $this->_View->loadHelper('Bootstrap.BootstrapButton');
 
 		#build headers based on $fields and if action
 		foreach($fields as $key => $field):
@@ -123,9 +123,10 @@ class BootstrapHtmlHelper extends BootstrapHelper {// extends BoostCakeHtmlHelpe
 			$this->setUnless($action,'controller',$controller);
 			
 			$key = (is_string($key)) ? $key : Inflector::humanize($action['action']);
-			$temp .= $this->Button->button($key, $this->url($action));
+			$this->BootstrapButton->add(['label'=>$key, 'link'=>$this->url($action)]);
 		endforeach;
-		$actions = $this->Button->group($temp);
+		// $actions = $this->Button->group($temp);
+		$actions = (string) $this->BootstrapButton;
 		unset($temp);
 		$rows = [];
 		foreach($records as $key => $record):
