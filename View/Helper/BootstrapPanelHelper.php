@@ -1,6 +1,7 @@
 <?php
 App::uses('BootstrapHelper', 'Bootstrap.View/Helper');
 App::uses('BootstrapHelperEntity', 'Bootstrap.View/Helper/Entity');
+App::uses('BootstrapHelperMultipartEntity', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperEntityCollection', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperWrappedEntityCollection', 'Bootstrap.View/Helper/Entity');
 
@@ -8,10 +9,7 @@ class BootstrapPanelHelper extends BootstrapHelperEntityCollection{
 	protected $_entityClass = 'BootstrapPanelEntity';
 }
 
-class BootstrapPanelEntity extends BootstrapHelperEntity{
-	public $Header = null;
-	public $Body = null;
-	public $Footer = null;
+class BootstrapPanelEntity extends BootstrapHelperMultipartEntity{
 
 	protected $_options = [
 		'tag'=>'div',
@@ -19,12 +17,12 @@ class BootstrapPanelEntity extends BootstrapHelperEntity{
 		'context'=>'default',
 	];
 
-	public function __construct(View $view, $settings = array()) {
-        parent::__construct($view, $settings);
-        $this->Header = new BootstrapPanelHeaderEntity($view, $settings);
-        $this->Body = new BootstrapPanelBodyEntity($view, $settings);
-        $this->Footer = new BootstrapPanelFooterEntity($view, $settings);
-    }
+	protected $parts = [
+		'Header' => 'BootstrapPanelHeaderEntity',
+		'Body' => 'BootstrapPanelBodyEntity',
+		'Footer' => 'BootstrapPanelFooterEntity'
+		];
+
 
     public function create($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
     	if(is_string($data)):
@@ -54,22 +52,9 @@ class BootstrapPanelEntity extends BootstrapHelperEntity{
 	    return parent::create($data, $options, $keyRemaps, $valueRemaps);
     }
 
-	public function __toString(){
-    	$result = [];
-    	$result[] = $this->Header->toString();
-    	$result[] = $this->Body->toString();
-    	$result[] = $this->Footer->toString();
-
-    	$options = $this->options();
-    	$options[$this->_contentToken] = implode(PHP_EOL, $result);
-
-    	$this->options($options);
-
-    	return parent::__toString();
-    }
 }
 
-class BootstrapPanelHeaderEntity extends BootstrapHelperEntity{
+class BootstrapPanelHeaderEntity extends BootstrapHelperMultipartEntity{
 	public $Title = null;
 
 	protected $_options = [
@@ -77,10 +62,9 @@ class BootstrapPanelHeaderEntity extends BootstrapHelperEntity{
 		'baseClass'=>'panel-heading',
 	];
 
-	public function __construct(View $view, $settings = array()) {
-        parent::__construct($view, $settings);
-        $this->Title = new BootstrapPanelTitleEntity($view, $settings);
-    }
+	protected $parts = [
+		'Title' => 'BootstrapPanelTitleEntity',
+		];
 
 	public function create($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
 		if(isset($data['title'])):
@@ -88,19 +72,6 @@ class BootstrapPanelHeaderEntity extends BootstrapHelperEntity{
 		endif;
 		return parent::create($data, $options, $keyRemaps, $valueRemaps);
 	}
-
-	public function __toString(){
-		$result = [];
-    	$result[] = $this->Title->toString(); #inject TITLE into content
-
-    	$options = $this->options();
-    	$this->setUnless($options, $this->_contentToken, '');
-    	$options[$this->_contentToken] .= implode(PHP_EOL, $result);
-
-    	$this->options($options);
-
-    	return parent::__toString();
-	}	
 	
 }
 

@@ -2,6 +2,7 @@
 
 App::uses('BootstrapHelper', 'Bootstrap.View/Helper');
 App::uses('BootstrapHelperEntity', 'Bootstrap.View/Helper/Entity');
+App::uses('BootstrapHelperMultipartEntity', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperEntityCollection', 'Bootstrap.View/Helper/Entity');
 // App::uses('BootstrapHelperWrappedEntityCollection', 'Bootstrap.View/Helper/Entity');
 
@@ -211,22 +212,26 @@ class BootstrapModalWindowEntity extends BootstrapHelperEntity{
 
 }
 
-class BootstrapModalEntity extends BootstrapHelperEntity{
+class BootstrapModalEntity extends BootstrapHelperMultipartEntity{
 
-	public $Trigger = null;
-	public $Window = null;
+	protected $parts = [
+		'Trigger' => 'BootstrapModalTriggerEntity',
+		'Window' => 'BootstrapModalWindowEntity',
+		];
+	// public $Trigger = null;
+	// public $Window = null;
 
-	public function __toString(){
-		$result = [];
-		$result[] = $this->Trigger->toString();
-		$result[] = $this->Window->toString();
-		return implode(PHP_EOL, $result);
-	}
+	// public function __toString(){
+	// 	$result = [];
+	// 	$result[] = $this->Trigger->toString();
+	// 	$result[] = $this->Window->toString();
+	// 	return implode(PHP_EOL, $result);
+	// }
 	
 	public function __construct(View $view, $settings = array()) {
         parent::__construct($view, $settings);
-        $this->Window = new BootstrapModalWindowEntity($view, $settings);
-        $this->Trigger = new BootstrapModalTriggerEntity($view, $settings);
+        // $this->Window = new BootstrapModalWindowEntity($view, $settings);
+        // $this->Trigger = new BootstrapModalTriggerEntity($view, $settings);
 
         $this->Window->setParentNode($this);
         $this->Trigger->setParentNode($this);
