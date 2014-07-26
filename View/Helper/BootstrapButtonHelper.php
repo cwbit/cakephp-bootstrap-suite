@@ -4,14 +4,12 @@ App::uses('BootstrapHelperEntity', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperEntityCollection', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperWrappedEntityCollection', 'Bootstrap.View/Helper/Entity');
 
-class BootstrapButtonHelper extends BootstrapHelperEntityCollection{
-
-	protected $_entityClass = 'BootstrapButtonEntity';
-
-}
+// class BootstrapButtonHelper extends BootstrapHelperEntityCollection{
+// 	protected $_entityClass = 'BootstrapButtonEntity';
+// }
 
 class BootstrapButtonEntity extends BootstrapHelperEntity{
-	protected $_pattern = "<:tag :htmlAttributes>:labelPrefix:label:labelSuffix</:tag>";
+	protected $_pattern = "<:tag :htmlAttributes>:prefix:label:suffix</:tag>";
 	protected $_contentToken = 'label';
 
 	protected $_options = [
@@ -23,8 +21,8 @@ class BootstrapButtonEntity extends BootstrapHelperEntity{
 		'block' => 'noblock', #set to 'block' for block width
 		'active' => '',
 		'label' => ':label',
-		'labelPrefix' => '', #allows for injection of things like glyphicons
-		'labelSuffix' => '', #or dropdown carets
+		'prefix' => '', #allows for injection of things like glyphicons
+		'suffix' => '', #or dropdown carets
 		'htmlAttributes'=>[
 			'id' => ':id',
 			'role' => 'button',
@@ -34,10 +32,21 @@ class BootstrapButtonEntity extends BootstrapHelperEntity{
 		],
 	
 	];
+
+	public function __toString(){
+		$o = $this->options();
+
+		if(!$this->isDirty($o, 'htmlAttributes.onclick', $emptyIsDirty = false)):
+			unset($o['htmlAttributes']['onclick']);
+		endif;
+
+		$this->options($o);
+
+		return parent::__toString();
+	}
 }
 
-/* not used yet */
-class BootstrapButtonGroupCollection extends BootstrapHelperWrappedEntityCollection{
+class BootstrapButtonHelper extends BootstrapHelperWrappedEntityCollection{
 	protected $_entityClass = 'BootstrapButtonEntity';
 	protected $_options = [
 		'baseClass' => 'btn-group btn-group-:size btn-group-:orientation',
@@ -57,9 +66,9 @@ class BootstrapButtonGroupCollection extends BootstrapHelperWrappedEntityCollect
 	// 			endif;
 
 	// 			$result .= $this->safeInsertData("<:tag id=':id' class=':class' :htmlAttributes :link>", $options);
-	// 			$result .= $options['labelPrefix'];
+	// 			$result .= $options['prefix'];
 	// 			$result .= $options['label'];
-	// 			$result .= $options['labelSuffix'];
+	// 			$result .= $options['suffix'];
 	// 			$result .= $this->safeInsertData("</:tag>",$options);
 
 
