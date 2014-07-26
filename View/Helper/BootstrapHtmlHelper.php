@@ -127,6 +127,7 @@ class BootstrapHtmlHelper extends BootstrapHelper {// extends BoostCakeHtmlHelpe
 		endforeach;
 		// $actions = $this->Button->group($temp);
 		$actions = (string) $this->BootstrapButton;
+		$this->BootstrapButton->delete();
 		unset($temp);
 		$rows = [];
 		foreach($records as $key => $record):
