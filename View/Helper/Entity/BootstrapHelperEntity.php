@@ -85,7 +85,7 @@ class BootstrapHelperEntity extends BootstrapHelper{
      * IMPORTANT: This should never be overridden. Override __toString() instead.
      * @return string
      */
-    public function toString(){ return (string) $this; }    
+    final public function toString(){ return (string) $this; }    
 
     /**
      * Converts an entity into it's string representation. Uses $this->_pattern, $this->_options and $this->_data
