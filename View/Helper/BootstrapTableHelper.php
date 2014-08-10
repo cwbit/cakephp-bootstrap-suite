@@ -2,6 +2,7 @@
 
 App::uses('BootstrapHelper','Bootstrap.View/Helper');
 App::uses('BootstrapHelperEntity', 'Bootstrap.View/Helper/Entity');
+App::uses('BootstrapHelperMultipartEntity', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperEntityCollection', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperWrappedEntityCollection', 'Bootstrap.View/Helper/Entity');
 
