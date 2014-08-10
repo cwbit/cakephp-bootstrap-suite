@@ -53,12 +53,19 @@ class BootstrapHelperEntityCollection extends BootstrapHelperEntity implements A
 	}
 
 	/**
-	 * This passthrough function will allow create() calls on an EntityCollection to generate a one-off instance of $_entityClass to be called; instead of always first requiring an add() call (which stores each child $_entityClass instance in the parent helper - which can be very memory intensive and is generally not needed)
+	 * This passthrough function will allow create() calls on an EntityCollection to generate a one-off 
+	 * instance of $_entityClass to be called; instead of always first requiring 
+	 * an add() call (which stores each child $_entityClass instance in the parent helper - which can be very memory intensive and is generally not needed)
 	 * 
 	 * @see BootsrapHelperEntity::create()
 	 * @return BootstrapHelperEntity
 	 */
 	public function create($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
+		#if this is the first time we've called add() on the collection, we need to create() it
+		// if(!$this->_wasCreated):
+		// 	parent::create();
+		// endif;
+
 		$p = new $this->_entityClass($this->_view, $this->_settings);
 		return $p->create($data, $options, $keyRemaps, $valueRemaps);
 	}
