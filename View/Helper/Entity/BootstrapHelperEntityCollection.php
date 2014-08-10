@@ -62,9 +62,9 @@ class BootstrapHelperEntityCollection extends BootstrapHelperEntity implements A
 	 */
 	public function create($data = '', $options = [], $keyRemaps = false, $valueRemaps = false){
 		#if this is the first time we've called add() on the collection, we need to create() it
-		// if(!$this->_wasCreated):
-		// 	parent::create();
-		// endif;
+		if(!$this->_wasCreated):
+			parent::create();
+		endif;
 
 		$p = new $this->_entityClass($this->_view, $this->_settings);
 		return $p->create($data, $options, $keyRemaps, $valueRemaps);
