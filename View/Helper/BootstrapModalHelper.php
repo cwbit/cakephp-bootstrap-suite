@@ -6,7 +6,28 @@ App::uses('BootstrapHelperMultipartEntity', 'Bootstrap.View/Helper/Entity');
 App::uses('BootstrapHelperEntityCollection', 'Bootstrap.View/Helper/Entity');
 // App::uses('BootstrapHelperWrappedEntityCollection', 'Bootstrap.View/Helper/Entity');
 
+class BootstrapModalHelper extends BootstrapHelperEntityCollection{
+	public $_entityClass = 'BootstrapModalEntity';
+}
 
+class BootstrapModalEntity extends BootstrapHelperMultipartEntity{
+
+	protected $parts = [
+		'Trigger' => 'BootstrapModalTriggerEntity',
+		'Window' => 'BootstrapModalWindowEntity',
+		];
+
+	public function getWindow(){ return $this->Window; }
+	public function getTrigger(){ return $this->Trigger; }
+}
+
+// class BootstrapModalWindowEntity extends BootstrapHelperMultipartEntity{
+// 	protected $parts = ['Header', 'Body', 'Footer'];
+// }
+
+// class BootstrapModalTriggerEntity extends BootstrapHelperEntity{
+// 	protected
+// }
 class BootstrapModalTriggerEntity extends BootstrapHelperEntity{
 	// public $remoteURL = null;
 	public $helpers = ['JS','Bootstrap.BootstrapHtml','Session'];
@@ -150,7 +171,7 @@ class BootstrapModalWindowEntity extends BootstrapHelperEntity{
 			$this->setDefault($data,'body',$data);
 		endif;	
 
-		$this->setUnless($data,'id',$this->getParentNode()->id);
+		$this->setUnless($options,'id',$this->getParentNode()->id);
 
 		return parent::create($data, $options, $keyRemaps, $valueRemaps);
 
@@ -179,7 +200,7 @@ class BootstrapModalWindowEntity extends BootstrapHelperEntity{
 					$options['body']['content'] = $this->Session->flash().$options['body']['content'];
 					if(!is_null($this->remoteURL)):
 						$options['body']['content'] .= "<script type='text/javascript'>";
-						$options['body']['content'] .= "\$('#{$this->id}').on('show.bs.modal', function (event) {\$.ajax({dataType:'html', success:function (data, textStatus) {\$('{$options['body']['htmlAttributes']['id']}').html(data);}, url:'{$this->remoteURL}'}); }); ";
+						$options['body']['content'] .= "\$('#{$this->id}').on('show.bs.modal', function (event) {\$.ajax({dataType:'html', success:function (data, textStatus) {\$('#{$options['body']['htmlAttributes']['id']}').html(data);}, url:'{$this->remoteURL}'}); }); ";
 						$options['body']['content'] .= "</script>";
 					endif;
 					if ($this->isDirty($options, 'body.content')):
@@ -212,34 +233,6 @@ class BootstrapModalWindowEntity extends BootstrapHelperEntity{
 
 }
 
-class BootstrapModalEntity extends BootstrapHelperMultipartEntity{
 
-	protected $parts = [
-		'Trigger' => 'BootstrapModalTriggerEntity',
-		'Window' => 'BootstrapModalWindowEntity',
-		];
-	// public $Trigger = null;
-	// public $Window = null;
 
-	// public function __toString(){
-	// 	$result = [];
-	// 	$result[] = $this->Trigger->toString();
-	// 	$result[] = $this->Window->toString();
-	// 	return implode(PHP_EOL, $result);
-	// }
-	
-	public function __construct(View $view, $settings = array()) {
-        parent::__construct($view, $settings);
-        // $this->Window = new BootstrapModalWindowEntity($view, $settings);
-        // $this->Trigger = new BootstrapModalTriggerEntity($view, $settings);
-
-        $this->Window->setParentNode($this);
-        $this->Trigger->setParentNode($this);
-    }
-		
-}
-
-class BootstrapModalHelper extends BootstrapHelperEntityCollection{
-	public $_entityClass = 'BootstrapModalEntity';
-}
 ?>

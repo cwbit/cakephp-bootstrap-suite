@@ -18,7 +18,7 @@ class BootstrapTableHelper extends BootstrapHelperEntityCollection{
 class BootstrapTableEntity extends BootstrapHelperMultipartEntity{
 	protected $_options = [
 		'tag'		=> 'table',
-		'baseClass' =>'table table-:hover table-:striped table-:bordered table-:condensed',
+		'baseClass' =>'table header-primary table-:hover table-:striped table-:bordered table-:condensed',
 		'striped' =>'striped',
 		'bordered' =>'notbordered', #set to 'bordered' to use
 		'hover' =>'hover',

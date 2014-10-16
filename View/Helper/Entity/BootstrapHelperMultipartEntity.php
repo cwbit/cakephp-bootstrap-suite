@@ -46,8 +46,10 @@ class BootstrapHelperMultipartEntity extends BootstrapHelperEntity{
         foreach($this->parts as $key => $value):
         	if(is_integer($key) && is_string($value)):
         		$this->{$value} = new $this->_defaultPartClass($view, $settings);
+                $this->{$value}->setParentNode($this);
         	elseif(is_string($key) && is_string($value)):
         		$this->{$key} = new $value($view, $settings);
+                $this->{$key}->setParentNode($this);
         	else:
         		throw new BootstrapFrameworkException('Malformed Multipart for Class '.get_class().'. Was given ['.(string) $key.']=>['.(string) $value.']');
         	endif;

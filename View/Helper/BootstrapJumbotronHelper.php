@@ -21,7 +21,7 @@ class BootstrapJumbotronEntity extends BootstrapHelperEntity{
 	public $Body = null;
 	public $_options = [
 		'tag' => 'div',
-		'class' => 'jumbotron container',
+		'class' => 'jumbotron',
 	];
 
 	public function __construct(View $view, $settings = array()) {
